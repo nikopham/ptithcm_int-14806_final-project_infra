@@ -357,7 +357,7 @@ INSERT INTO public.users (email, username, password_hash, role_id, email_verifie
 VALUES (
     'admin@streamify.com',
     'SuperAdmin',
-    crypt('Admin@123', gen_salt('bf')), -- Mật khẩu giải mã là: Admin@123
+    '$2a$10$R/ljOZLzz67Q53bxeyovzu/zHqyrZAKsnVBquryqZzoj39R2HtwtS', -- Mật khẩu giải mã là: Admin@123
     (SELECT id FROM roles WHERE code = 'super_admin' LIMIT 1),
     true,
     true,
@@ -370,7 +370,7 @@ INSERT INTO public.users (email, username, password_hash, role_id, email_verifie
 VALUES (
     'content@streamify.com',
     'ContentManager',
-    crypt('Content@123', gen_salt('bf')), -- Mật khẩu giải mã là: Content@123
+    '$2a$10$R/ljOZLzz67Q53bxeyovzu/zHqyrZAKsnVBquryqZzoj39R2HtwtS', -- Mật khẩu giải mã là: Content@123
     (SELECT id FROM roles WHERE code = 'movie_admin' LIMIT 1),
     true,
     true,
@@ -378,25 +378,13 @@ VALUES (
 )
 ON CONFLICT (email) DO NOTHING;
 
--- 3. Tạo Comment Admin (Người kiểm duyệt bình luận)
-INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
-VALUES (
-    'mod@streamify.com',
-    'Moderator',
-    crypt('Mod@123', gen_salt('bf')), -- Mật khẩu giải mã là: Mod@123
-    (SELECT id FROM roles WHERE code = 'comment_admin' LIMIT 1),
-    true,
-    true,
-    'https://ui-avatars.com/api/?name=Moderator&background=f1c40f&color=fff'
-)
-ON CONFLICT (email) DO NOTHING;
 
 -- 4. Tạo Viewer (Người dùng thường - Đã xác thực)
 INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
 VALUES (
     'user@example.com',
     'ChillWatcher',
-    crypt('User@123', gen_salt('bf')), -- Mật khẩu giải mã là: User@123
+    '$2a$10$R/ljOZLzz67Q53bxeyovzu/zHqyrZAKsnVBquryqZzoj39R2HtwtS', -- Mật khẩu giải mã là: User@123
     (SELECT id FROM roles WHERE code = 'viewer' LIMIT 1),
     true,
     true,
@@ -409,7 +397,7 @@ INSERT INTO public.users (email, username, password_hash, role_id, email_verifie
 VALUES (
     'newbie@example.com',
     'NewMember',
-    crypt('User@123', gen_salt('bf')),
+    '$2a$10$R/ljOZLzz67Q53bxeyovzu/zHqyrZAKsnVBquryqZzoj39R2HtwtS',
     (SELECT id FROM roles WHERE code = 'viewer' LIMIT 1),
     false, -- Chưa xác thực
     true,
