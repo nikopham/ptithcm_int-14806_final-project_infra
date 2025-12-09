@@ -1,31 +1,7 @@
 version: "3.9"
 
 services:
-  redis:
-    image: redis:7-alpine
-    container_name: movie-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
-  minio:
-    image: minio/minio:latest
-    container_name: movie-minio
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: minio
-      MINIO_ROOT_PASSWORD: minio123
-    ports:
-      - "9000:9000"   # S3 API
-      - "9001:9001"   # Web console
-    volumes:
-      - minio_data:/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/ready"]
-      interval: 30s
-      retries: 3
+  
 
 volumes:
   redis_data:
