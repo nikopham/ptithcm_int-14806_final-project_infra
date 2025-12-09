@@ -352,6 +352,71 @@ VALUES
   ('super_admin',    'Super Administrator')
 ON CONFLICT (code) DO NOTHING;
 
+-- 1. Tạo Super Admin (Quản trị viên cấp cao)
+INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
+VALUES (
+    'admin@streamify.com',
+    'SuperAdmin',
+    crypt('Admin@123', gen_salt('bf')), -- Mật khẩu giải mã là: Admin@123
+    (SELECT id FROM roles WHERE code = 'super_admin' LIMIT 1),
+    true,
+    true,
+    'https://ui-avatars.com/api/?name=Super+Admin&background=0D8ABC&color=fff'
+)
+ON CONFLICT (email) DO NOTHING;
+
+-- 2. Tạo Movie Admin (Người quản lý nội dung phim)
+INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
+VALUES (
+    'content@streamify.com',
+    'ContentManager',
+    crypt('Content@123', gen_salt('bf')), -- Mật khẩu giải mã là: Content@123
+    (SELECT id FROM roles WHERE code = 'movie_admin' LIMIT 1),
+    true,
+    true,
+    'https://ui-avatars.com/api/?name=Content+Manager&background=2ecc71&color=fff'
+)
+ON CONFLICT (email) DO NOTHING;
+
+-- 3. Tạo Comment Admin (Người kiểm duyệt bình luận)
+INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
+VALUES (
+    'mod@streamify.com',
+    'Moderator',
+    crypt('Mod@123', gen_salt('bf')), -- Mật khẩu giải mã là: Mod@123
+    (SELECT id FROM roles WHERE code = 'comment_admin' LIMIT 1),
+    true,
+    true,
+    'https://ui-avatars.com/api/?name=Moderator&background=f1c40f&color=fff'
+)
+ON CONFLICT (email) DO NOTHING;
+
+-- 4. Tạo Viewer (Người dùng thường - Đã xác thực)
+INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
+VALUES (
+    'user@example.com',
+    'ChillWatcher',
+    crypt('User@123', gen_salt('bf')), -- Mật khẩu giải mã là: User@123
+    (SELECT id FROM roles WHERE code = 'viewer' LIMIT 1),
+    true,
+    true,
+    'https://ui-avatars.com/api/?name=Chill+Watcher&background=e74c3c&color=fff'
+)
+ON CONFLICT (email) DO NOTHING;
+
+-- 5. Tạo Viewer (Người dùng chưa xác thực email - Để test luồng verify)
+INSERT INTO public.users (email, username, password_hash, role_id, email_verified, is_active, avatar_url)
+VALUES (
+    'newbie@example.com',
+    'NewMember',
+    crypt('User@123', gen_salt('bf')),
+    (SELECT id FROM roles WHERE code = 'viewer' LIMIT 1),
+    false, -- Chưa xác thực
+    true,
+    'https://ui-avatars.com/api/?name=New+Member&background=95a5a6&color=fff'
+)
+ON CONFLICT (email) DO NOTHING;
+
 INSERT INTO countries (iso_code, name) VALUES
   ('AF', 'Afghanistan'),
   ('AX', 'Åland Islands'),
