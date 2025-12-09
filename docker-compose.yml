@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  db:
+    image: pgvector/pgvector:pg17      
+    container_name: final_db
+    restart: always
+    environment:
+      POSTGRES_USER: h1eu
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: final_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

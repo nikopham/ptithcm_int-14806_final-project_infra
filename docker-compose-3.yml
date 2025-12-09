@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.16
+    container_name: meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      - MEILI_MASTER_KEY=f40df06b47f029d32ac2bbd230e5c210a3ab613a
+      - MEILI_ENV=production
+      - MEILI_NO_ANALYTICS=true
+    volumes:
+      - ./meili_data:/meili_data 
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
