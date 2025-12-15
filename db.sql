@@ -731,3 +731,38 @@ select * from episodes e where e.season_id = 'ec6e44c1-ddc3-4e8b-a146-24b3d0ce81
 INSERT INTO auth_providers (provider_key, display_name) 
 VALUES ('google', 'Google')
 ON CONFLICT (provider_key) DO NOTHING;
+
+
+-- 1. Thêm cột accumulated_seconds
+ALTER TABLE viewing_history 
+ADD COLUMN accumulated_seconds BIGINT DEFAULT 0;
+
+-- 2. Migration dữ liệu cũ
+UPDATE viewing_history 
+SET accumulated_seconds = watched_seconds 
+WHERE accumulated_seconds = 0 AND watched_seconds > 0;
+
+-- 3. Đổi tên cột watched_seconds thành current_second
+ALTER TABLE viewing_history 
+RENAME COLUMN watched_seconds TO current_second;
+
+ALTER TABLE viewing_history 
+ALTER COLUMN current_second TYPE BIGINT;
+
+
+ALTER TABLE viewing_history 
+ALTER COLUMN total_seconds TYPE BIGINT;
+
+alter table viewing_history
+add column is_counted boolean not null default false
+
+drop table movie_embeddings 
+
+ALTER TABLE people
+ADD COLUMN job_tmp jsonb;
+
+UPDATE people
+SET job_tmp = to_jsonb(ARRAY[job]::text[]);
+
+ALTER TABLE people DROP COLUMN job;
+ALTER TABLE people RENAME COLUMN job_tmp TO job;
